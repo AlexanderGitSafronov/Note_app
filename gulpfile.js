@@ -21,9 +21,7 @@ function tailwind() {
   return src("./src/css/style.css")
     .pipe(
       postcss([
-        tailwindcss("./tailwind.config.js"),
-        require("gulp-autoprefixer"),
-        require("cssnano"),
+        tailwindcss("./tailwind.config.js")
       ])
     )
     .pipe(csso())
