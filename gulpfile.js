@@ -1,69 +1,82 @@
-const { src, dest, watch, parallel, series } = require("gulp");
+const { src, dest } = require("gulp");
+const gulp = require("gulp");
 
-const scss = require("gulp-sass")(require("sass"));
-const concat = require("gulp-concat");
 const uglify = require("gulp-uglify-es").default;
 const htmlmin = require("gulp-htmlmin");
-const browserSync = require('browser-sync').create();
-const clean = require('gulp-clean')
+const browserSync = require("browser-sync").create();
+const csso = require("gulp-csso");
+const postcss = require("gulp-postcss");
+const tailwindcss = require("tailwindcss");
+const rename = require("gulp-rename");
+const del = require("del");
 
 function minifyHTML() {
-  return src("app/*.html")
-    .pipe(concat("index.min.html"))
+  return src("src/index.html")
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(dest("app"))
-    .pipe(browserSync.stream())
+    .pipe(dest("dist"))
+    .pipe(browserSync.reload({ stream: true }));
 }
 
-function styles() {
-  return src("app/scss/style.scss")
-    .pipe(concat("style.min.css"))
-    .pipe(scss({ outputStyle: "compressed" }))
-    .pipe(dest("app/css"))
-    .pipe(browserSync.stream())
+function tailwind() {
+  return src("./src/css/style.css")
+    .pipe(
+      postcss([
+        tailwindcss("./tailwind.config.js"),
+        require("gulp-autoprefixer"),
+        require("cssnano"),
+      ])
+    )
+    .pipe(csso())
+    .pipe(
+      rename({
+        suffix: ".min",
+        extname: ".css",
+      })
+    )
+    .pipe(dest("./dist/css"))
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 function scripts() {
-  return src("app/js/main.js")
-    .pipe(concat("main.min.js"))
+  return src("src/js/main.js")
     .pipe(uglify())
-    .pipe(dest("app/js"))
-    .pipe(browserSync.stream())
+    .pipe(
+      rename({
+        suffix: ".min",
+        extname: ".js",
+      })
+    )
+    .pipe(dest("dist/js"))
+    .pipe(browserSync.reload({ stream: true }));
 }
 
-function watching() {
-  watch(['app/index.html'], minifyHTML)
-  watch(['app/scss/style.scss'], styles)
-  watch(['app/js/main.js'], scripts)
+function watchFile() {
+  gulp.watch(["src/index.html"], minifyHTML);
+  gulp.watch(["src/css/style.css"], tailwind);
+  gulp.watch(["src/js/main.js"], scripts);
 }
 
-function browsersync (){
-    browserSync.init({
-        server: {
-            baseDir: "app/"
-        }
-    });
+function serve() {
+  browserSync.init({
+    server: {
+      baseDir: "dist",
+    },
+  });
 }
 
-function cleanDist(){
-    return src('dist')
-    .pipe(clean())
+function clean() {
+  return del("dist");
 }
 
-function building(){
-    return src([
-        'app/index.min.html',
-        'app/css/style.min.css',
-        'app/js/main.min.js'
-    ], {base: 'app'})
-    .pipe(dest('dist'))
-}
+const build = gulp.series(clean, gulp.parallel(minifyHTML, tailwind, scripts));
+const watch = gulp.parallel(build, watchFile, serve);
 
-exports.styles = styles;
-exports.scripts = scripts;
 exports.minifyHTML = minifyHTML;
-exports.watching = watching;
-exports.browsersync = browsersync;
+exports.tailwind = tailwind;
+exports.scripts = scripts;
+exports.clean = clean;
+exports.serve = serve;
 
-exports.build = series(cleanDist,building)
-exports.default = parallel(minifyHTML,styles,scripts,browsersync,watching)
+exports.build = build;
+exports.watch = watch;
+exports.default = watch;

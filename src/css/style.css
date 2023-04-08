@@ -1,0 +1,10 @@
+div{
+    height: 10px;
+}
+p{
+    padding: 0;
+}
+a {
+    color: red;
+    text-transform: uppercase;
+}
