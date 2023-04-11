@@ -11,3 +11,29 @@
 .add__task::before {
   @apply content-['+'] absolute block top-7 left-1/2 -translate-x-1/2 -translate-y-1/2  text-white text-6xl;
 }
+.wrapper__modal {
+  @apply relative w-screen h-screen bg-black bg-opacity-50 -z-10 opacity-0 transition duration-500;
+}
+.wrapper__modal.wrapper__modal_show {
+  opacity: 1;
+  z-index: 1;
+  transition: 0.5s all;
+}
+.modal {
+  @apply w-1/2 h-1/2 rounded  absolute top-20 left-1/2 -translate-x-1/2 flex flex-col p-10 bg-white relative;
+}
+.title {
+  @apply mb-6 text-2xl outline-none;
+}
+.subtitle {
+  @apply text-lg outline-none resize-none;
+}
+.buttons {
+  @apply absolute bottom-10 right-10 flex gap-8;
+}
+.buttons button {
+  @apply px-4 py-2 rounded bg-slate-400 text-white;
+}
+.buttons button:last-child {
+  @apply bg-blue-500;
+}

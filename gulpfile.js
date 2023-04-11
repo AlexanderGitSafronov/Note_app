@@ -50,7 +50,7 @@ function scripts() {
 
 function watchFile() {
   gulp.watch(["src/index.html"], minifyHTML);
-  gulp.watch(["src/css/style.css","src/index.html"], tailwind);
+  gulp.watch(["src/css/style.css","src/index.html","src/js/main.js"], tailwind);
   gulp.watch(["src/js/main.js"], scripts);
 }
 
