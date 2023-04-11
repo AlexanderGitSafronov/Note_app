@@ -4,6 +4,7 @@ const modal = document.querySelector(".modal");
 const wrapperNote = document.querySelector(".wrapper__note");
 let getTitleValue = document.querySelector(".title");
 let getSubtitleValue = document.querySelector(".subtitle");
+const addNoteBtn = document.querySelector(".add__note");
 
 // Показуати модалку
 modalOpen.addEventListener("click", () => {
@@ -12,6 +13,24 @@ modalOpen.addEventListener("click", () => {
 // Скрити модалку
 wrapperModal.addEventListener("click", () => {
   wrapperModal.classList.remove("wrapper__modal_show");
+});
+
+// перевірка на пустий інпут
+function removeDisabledAddNote() {
+  if (getTitleValue.value !== "" && getSubtitleValue.value !== "") {
+    addNoteBtn.removeAttribute("disabled");
+    addNoteBtn.style.background = "rgb(59 130 246)";
+  } else {
+    addNoteBtn.setAttribute("disabled", "disabled");
+    addNoteBtn.style.background = "rgb(156 163 175)";
+  }
+}
+
+getTitleValue.addEventListener("input", () => {
+  removeDisabledAddNote();
+});
+getSubtitleValue.addEventListener("input", () => {
+  removeDisabledAddNote();
 });
 
 modal.addEventListener("click", (e) => {
@@ -26,6 +45,7 @@ modal.addEventListener("click", (e) => {
     addNote();
     getTitleValue.value = "";
     getSubtitleValue.value = "";
+    removeDisabledAddNote();
   }
 });
 
