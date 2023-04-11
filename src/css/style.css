@@ -9,7 +9,7 @@
   @apply content-['+'] absolute block top-7 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-6xl;
 }
 .wrapper__modal {
-  @apply relative w-screen h-screen bg-black bg-opacity-50 -z-10 opacity-0 transition duration-500;
+  @apply absolute w-screen h-screen bg-black bg-opacity-50 -z-10 opacity-0 transition duration-500 top-0 left-0;
 }
 .wrapper__modal.wrapper__modal_show {
   @apply z-10 opacity-100 transition duration-500;
@@ -28,4 +28,7 @@
 }
 .buttons button:last-child {
   @apply bg-blue-500;
+}
+.title__note {
+  @apply text-[22px] mb-2 pb-2 border-b-2 break-words;
 }
