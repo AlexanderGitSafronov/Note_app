@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.wrapper {
+  @apply w-screen h-screen relative;
+}
+.add__task {
+  @apply w-16 h-16 absolute  bg-blue-500  rounded-full bottom-10 right-10 cursor-pointer;
+}
+.add__task::before {
+  @apply content-['+'] absolute block top-7 left-1/2 -translate-x-1/2 -translate-y-1/2  text-white text-6xl;
+}
