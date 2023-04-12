@@ -19,11 +19,7 @@ function minifyHTML() {
 
 function tailwind() {
   return src("./src/css/style.css")
-    .pipe(
-      postcss([
-        tailwindcss("./tailwind.config.js")
-      ])
-    )
+    .pipe(postcss([tailwindcss("./tailwind.config.js")]))
     .pipe(csso())
     .pipe(
       rename({
@@ -50,7 +46,10 @@ function scripts() {
 
 function watchFile() {
   gulp.watch(["src/index.html"], minifyHTML);
-  gulp.watch(["src/css/style.css","src/index.html","src/js/main.js"], tailwind);
+  gulp.watch(
+    ["src/css/style.css", "src/index.html", "src/js/main.js"],
+    tailwind
+  );
   gulp.watch(["src/js/main.js"], scripts);
 }
 
