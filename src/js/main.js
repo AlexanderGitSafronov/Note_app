@@ -27,12 +27,7 @@ function validateCreateButton() {
   }
 }
 
-// Видалення нотатки
-wrapperNote.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete__note")) {
-    e.target.closest(".note").remove();
-  }
-});
+
 
 getTitleValue.addEventListener("input", () => {
   validateCreateButton();
@@ -75,6 +70,12 @@ modal.addEventListener("click", (e) => {
   }
 });
 
+// Видалення нотатки
+wrapperNote.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete__note")) {
+    e.target.closest(".note").remove();
+  }
+});
 // Вивод нотаток на сторінку
 function showNotes(){
   if (localStorage.getItem("notes")) {
@@ -82,7 +83,7 @@ function showNotes(){
       wrapperNote.removeChild(wrapperNote.firstChild);
     }
     localNotes.forEach((item) => {
-      const note = `<div class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
+      const note = `<div data-id="${item.id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
   <div class="p-2 border rounded-lg">
   <div class="delete__note">X</div>
   <div class="title__note"><h2>${item.title}</h2></div>
