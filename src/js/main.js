@@ -41,9 +41,9 @@ getSubtitleValue.addEventListener("input", () => {
   validateCreateButton();
 });
 
-function handleNoteCreation(title, subtitle) {
+function handleNoteCreation() {
   hideModal();
-  addNote(title, subtitle);
+  showNotes();
   getTitleValue.value = "";
   getSubtitleValue.value = "";
   validateCreateButton();
@@ -63,14 +63,14 @@ modal.addEventListener("click", (e) => {
   }
   // Добавити нотатку на сторінку по кнопці створити
   if (e.target.classList.contains("add__note")) {
-    hideModal();
+    
     notesText.push({
       title: getTitleValue.value,
       subtitle: getSubtitleValue.value,
     });
     localStorage.setItem("notes", JSON.stringify(notesText));
     localNotes = JSON.parse(localStorage.getItem("notes"));
-    showNotes();
+    handleNoteCreation();
   }
 });
 
