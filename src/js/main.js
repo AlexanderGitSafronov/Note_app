@@ -6,11 +6,6 @@ const getTitleValue = document.querySelector(".title");
 const getSubtitleValue = document.querySelector(".subtitle");
 const addNoteBtn = document.querySelector(".add__note");
 
-// Отримуэм кнопки видалення
-function getDeletenote() {
-  return document.querySelectorAll(".delete__note");
-}
-
 // Показуати модалку
 modalOpen.addEventListener("click", () => {
   wrapperModal.classList.add("wrapper__modal_show");
