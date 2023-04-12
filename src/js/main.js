@@ -63,14 +63,15 @@ modal.addEventListener("click", (e) => {
   }
   // Добавити нотатку на сторінку по кнопці створити
   if (e.target.classList.contains("add__note")) {
-    
     notesText.push({
+      id: notesText.length + 1,
       title: getTitleValue.value,
       subtitle: getSubtitleValue.value,
     });
     localStorage.setItem("notes", JSON.stringify(notesText));
     localNotes = JSON.parse(localStorage.getItem("notes"));
     handleNoteCreation();
+    
   }
 });
 
