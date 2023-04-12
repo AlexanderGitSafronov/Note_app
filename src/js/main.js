@@ -41,12 +41,18 @@ getSubtitleValue.addEventListener("input", () => {
   validateCreateButton();
 });
 
-function handleNoteCreation() {
+function handleNoteCreation(title, subtitle) {
   hideModal();
-  addNote();
+  addNote(title, subtitle);
   getTitleValue.value = "";
   getSubtitleValue.value = "";
   validateCreateButton();
+}
+
+let localNotes = JSON.parse(localStorage.getItem("notes"));
+let notesText = [];
+if (localStorage.getItem("notes")){
+  notesText = localNotes;
 }
 
 modal.addEventListener("click", (e) => {
@@ -57,18 +63,35 @@ modal.addEventListener("click", (e) => {
   }
   // Добавити нотатку на сторінку по кнопці створити
   if (e.target.classList.contains("add__note")) {
-    handleNoteCreation();
+    hideModal();
+    notesText.push({
+      title: getTitleValue.value,
+      subtitle: getSubtitleValue.value,
+    });
+    localStorage.setItem("notes", JSON.stringify(notesText));
+    localNotes = JSON.parse(localStorage.getItem("notes"));
+    showNotes();
   }
 });
 
-// Нотатка
-function addNote() {
-  const note = `<div class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
+// Вивод нотаток на сторінку
+function showNotes(){
+  if (localStorage.getItem("notes")) {
+    while (wrapperNote.firstChild) {
+      wrapperNote.removeChild(wrapperNote.firstChild);
+    }
+    localNotes.forEach((item) => {
+      const note = `<div class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
   <div class="p-2 border rounded-lg">
-    <div class="delete__note">X</div>
-    <div class="title__note"><h2>${getTitleValue.value}</h2></div>
-    <div class="subtitle__note break-words">${getSubtitleValue.value}</div>
+  <div class="delete__note">X</div>
+  <div class="title__note"><h2>${item.title}</h2></div>
+  <div class="subtitle__note break-words">${item.subtitle}</div>
   </div>
-</div>`;
-  wrapperNote.insertAdjacentHTML("beforeend", note);
+  </div>`;
+      wrapperNote.insertAdjacentHTML("beforeend", note);
+    });
+  }
 }
+showNotes()
+
+
