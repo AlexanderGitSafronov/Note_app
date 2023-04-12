@@ -2,9 +2,14 @@ const modalOpen = document.querySelector(".add__task");
 const wrapperModal = document.querySelector(".wrapper__modal");
 const modal = document.querySelector(".modal");
 const wrapperNote = document.querySelector(".wrapper__note");
-let getTitleValue = document.querySelector(".title");
-let getSubtitleValue = document.querySelector(".subtitle");
+const getTitleValue = document.querySelector(".title");
+const getSubtitleValue = document.querySelector(".subtitle");
 const addNoteBtn = document.querySelector(".add__note");
+
+// Отримуэм кнопки видалення
+function getDeletenote() {
+  return document.querySelectorAll(".delete__note");
+}
 
 // Показуати модалку
 modalOpen.addEventListener("click", () => {
@@ -12,47 +17,59 @@ modalOpen.addEventListener("click", () => {
 });
 // Скрити модалку
 wrapperModal.addEventListener("click", () => {
-  wrapperModal.classList.remove("wrapper__modal_show");
+  hideModal();
 });
-
+// Скрити модалку
+function hideModal() {
+  wrapperModal.classList.remove("wrapper__modal_show");
+}
 // перевірка на пустий інпут
-function removeDisabledAddNote() {
+function disabledManipulation() {
   if (getTitleValue.value !== "" && getSubtitleValue.value !== "") {
     addNoteBtn.removeAttribute("disabled");
-    addNoteBtn.style.background = "rgb(59 130 246)";
   } else {
     addNoteBtn.setAttribute("disabled", "disabled");
-    addNoteBtn.style.background = "rgb(156 163 175)";
   }
 }
 
 getTitleValue.addEventListener("input", () => {
-  removeDisabledAddNote();
+  disabledManipulation();
 });
 getSubtitleValue.addEventListener("input", () => {
-  removeDisabledAddNote();
+  disabledManipulation();
 });
+
+// Видалити нотатку
+function deleteNote() {
+  getDeletenote().forEach((item) => {
+    item.addEventListener("click", () => {
+      item.closest(".note").remove();
+    });
+  });
+}
 
 modal.addEventListener("click", (e) => {
   e.stopPropagation();
   // Скрити модалку по кнопці відміни
   if (e.target.classList.contains("cancellation")) {
-    wrapperModal.classList.remove("wrapper__modal_show");
+    hideModal();
   }
   // Добавити нотатку на сторінку по кнопці створити
   if (e.target.classList.contains("add__note")) {
-    wrapperModal.classList.remove("wrapper__modal_show");
+    hideModal();
     addNote();
     getTitleValue.value = "";
     getSubtitleValue.value = "";
-    removeDisabledAddNote();
+    disabledManipulation();
+    deleteNote();
   }
 });
 
 // Нотатка
 function addNote() {
-  const note = `<div class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 ">
+  const note = `<div class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
   <div class="p-2 border rounded-lg">
+    <div class="delete__note">X</div>
     <div class="title__note"><h2>${getTitleValue.value}</h2></div>
     <div class="subtitle__note break-words">${getSubtitleValue.value}</div>
   </div>

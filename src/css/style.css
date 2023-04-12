@@ -27,8 +27,16 @@
   @apply px-4 py-2 rounded bg-gray-700 text-white;
 }
 .buttons button:last-child {
-  @apply bg-gray-400;
+  @apply bg-blue-500  disabled:bg-gray-400;
 }
 .title__note {
   @apply text-[22px] mb-2 pb-2 border-b-2 break-words;
 }
+
+.delete__note{
+  @apply -z-10 opacity-0 absolute top-0 right-0 px-2 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-950 hover:text-white
+}
+.note:hover .delete__note{
+  @apply z-10 opacity-100
+}
+
