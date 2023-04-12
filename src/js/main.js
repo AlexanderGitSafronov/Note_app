@@ -27,6 +27,13 @@ function validateCreateButton() {
   }
 }
 
+// Видалення нотатки
+wrapperNote.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete__note")) {
+    e.target.closest(".note").remove();
+  }
+});
+
 getTitleValue.addEventListener("input", () => {
   validateCreateButton();
 });
