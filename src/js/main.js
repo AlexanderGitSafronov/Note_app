@@ -24,7 +24,7 @@ function hideModal() {
   wrapperModal.classList.remove("wrapper__modal_show");
 }
 // перевірка на пустий інпут
-function disabledManipulation() {
+function validateCreateButton() {
   if (getTitleValue.value !== "" && getSubtitleValue.value !== "") {
     addNoteBtn.removeAttribute("disabled");
   } else {
@@ -33,19 +33,18 @@ function disabledManipulation() {
 }
 
 getTitleValue.addEventListener("input", () => {
-  disabledManipulation();
+  validateCreateButton();
 });
 getSubtitleValue.addEventListener("input", () => {
-  disabledManipulation();
+  validateCreateButton();
 });
 
-// Видалити нотатку
-function deleteNote() {
-  getDeletenote().forEach((item) => {
-    item.addEventListener("click", () => {
-      item.closest(".note").remove();
-    });
-  });
+function handleNoteCreation() {
+  hideModal();
+  addNote();
+  getTitleValue.value = "";
+  getSubtitleValue.value = "";
+  validateCreateButton();
 }
 
 modal.addEventListener("click", (e) => {
@@ -56,12 +55,7 @@ modal.addEventListener("click", (e) => {
   }
   // Добавити нотатку на сторінку по кнопці створити
   if (e.target.classList.contains("add__note")) {
-    hideModal();
-    addNote();
-    getTitleValue.value = "";
-    getSubtitleValue.value = "";
-    disabledManipulation();
-    deleteNote();
+    handleNoteCreation();
   }
 });
 
