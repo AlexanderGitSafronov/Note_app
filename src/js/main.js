@@ -55,13 +55,7 @@ wrapperNote.addEventListener("click", (e) => {
 
 // Добавляєм нотатку
 function pushNote(id, title, subtitle) {
-  wrapperNote.innerHTML += `<div data-id="${id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
-    <div class="p-2 border rounded-lg">
-    <div class="delete__note">X</div>
-    <div class="title__note"><h2>${title}</h2></div>
-    <div class="subtitle__note break-words">${subtitle}</div>
-    </div>
-    </div>`;
+  wrapperNote.innerHTML += noteHtml(id,title,subtitle);
 }
 
 function handleNoteCreation(id, title, subtitle) {
@@ -88,16 +82,21 @@ function showNotes() {
   if (localNotes) {
     const notes = localNotes
       .map((item) => {
-        return `<div data-id="${item.id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
-      <div class="p-2 border rounded-lg">
-      <div class="delete__note">X</div>
-      <div class="title__note"><h2>${item.title}</h2></div>
-      <div class="subtitle__note break-words">${item.subtitle}</div>
-      </div>
-      </div>`;
+        return noteHtml(item.id,item.title,item.subtitle)
       })
       .join("");
     wrapperNote.insertAdjacentHTML("beforeend", notes);
   }
 }
 showNotes();
+
+// Нотатка HTML
+function noteHtml(id,title,subtitle) {
+  return `<div data-id="${id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
+  <div class="p-2 border rounded-lg">
+  <div class="delete__note">X</div>
+  <div class="title__note"><h2>${title}</h2></div>
+  <div class="subtitle__note break-words">${subtitle}</div>
+  </div>
+  </div>`
+}
