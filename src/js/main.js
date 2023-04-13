@@ -14,20 +14,6 @@ modalOpen.addEventListener("click", () => {
 wrapperModal.addEventListener("click", () => {
   hideModal();
 });
-// Скрити модалку
-function hideModal() {
-  wrapperModal.classList.remove("wrapper__modal_show");
-}
-// перевірка на пустий інпут
-function validateCreateButton() {
-  if (getTitleValue.value !== "" && getSubtitleValue.value !== "") {
-    addNoteBtn.removeAttribute("disabled");
-  } else {
-    addNoteBtn.setAttribute("disabled", "disabled");
-  }
-}
-
-
 
 getTitleValue.addEventListener("input", () => {
   validateCreateButton();
@@ -36,13 +22,6 @@ getSubtitleValue.addEventListener("input", () => {
   validateCreateButton();
 });
 
-function handleNoteCreation() {
-  hideModal();
-  showNotes();
-  getTitleValue.value = "";
-  getSubtitleValue.value = "";
-  validateCreateButton();
-}
 
 let localNotes = JSON.parse(localStorage.getItem("notes"));
 let notesText = [];
@@ -76,6 +55,27 @@ wrapperNote.addEventListener("click", (e) => {
     e.target.closest(".note").remove();
   }
 });
+
+
+function handleNoteCreation() {
+  hideModal();
+  showNotes();
+  getTitleValue.value = "";
+  getSubtitleValue.value = "";
+  validateCreateButton();
+}
+// Скрити модалку
+function hideModal() {
+  wrapperModal.classList.remove("wrapper__modal_show");
+}
+// перевірка на пустий інпут
+function validateCreateButton() {
+  if (getTitleValue.value !== "" && getSubtitleValue.value !== "") {
+    addNoteBtn.removeAttribute("disabled");
+  } else {
+    addNoteBtn.setAttribute("disabled", "disabled");
+  }
+}
 // Вивод нотаток на сторінку
 function showNotes(){
   if (localStorage.getItem("notes")) {
