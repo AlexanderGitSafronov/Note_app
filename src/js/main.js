@@ -22,12 +22,7 @@ getSubtitleValue.addEventListener("input", () => {
   validateCreateButton();
 });
 
-
-let localNotes = JSON.parse(localStorage.getItem("notes"));
-let notesText = [];
-if (localStorage.getItem("notes")){
-  notesText = localNotes;
-}
+let localNotes = JSON.parse(localStorage.getItem("notes")) || [];
 
 modal.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -37,15 +32,17 @@ modal.addEventListener("click", (e) => {
   }
   // Добавити нотатку на сторінку по кнопці створити
   if (e.target.classList.contains("add__note")) {
-    notesText.push({
-      id: notesText.length + 1,
+    localNotes.push({
+      id: localNotes.length + 1,
       title: getTitleValue.value,
       subtitle: getSubtitleValue.value,
     });
-    localStorage.setItem("notes", JSON.stringify(notesText));
-    localNotes = JSON.parse(localStorage.getItem("notes"));
-    handleNoteCreation();
-    
+    localStorage.setItem("notes", JSON.stringify(localNotes));
+    handleNoteCreation(
+      localNotes.length + 1,
+      getTitleValue.value,
+      getSubtitleValue.value
+    );
   }
 });
 
@@ -56,10 +53,20 @@ wrapperNote.addEventListener("click", (e) => {
   }
 });
 
+// Добавляєм нотатку
+function pushNote(id, title, subtitle) {
+  wrapperNote.innerHTML += `<div data-id="${id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
+    <div class="p-2 border rounded-lg">
+    <div class="delete__note">X</div>
+    <div class="title__note"><h2>${title}</h2></div>
+    <div class="subtitle__note break-words">${subtitle}</div>
+    </div>
+    </div>`;
+}
 
-function handleNoteCreation() {
+function handleNoteCreation(id, title, subtitle) {
   hideModal();
-  showNotes();
+  pushNote(id, title, subtitle);
   getTitleValue.value = "";
   getSubtitleValue.value = "";
   validateCreateButton();
@@ -77,23 +84,20 @@ function validateCreateButton() {
   }
 }
 // Вивод нотаток на сторінку
-function showNotes(){
-  if (localStorage.getItem("notes")) {
-    while (wrapperNote.firstChild) {
-      wrapperNote.removeChild(wrapperNote.firstChild);
-    }
-    localNotes.forEach((item) => {
-      const note = `<div data-id="${item.id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
-  <div class="p-2 border rounded-lg">
-  <div class="delete__note">X</div>
-  <div class="title__note"><h2>${item.title}</h2></div>
-  <div class="subtitle__note break-words">${item.subtitle}</div>
-  </div>
-  </div>`;
-      wrapperNote.insertAdjacentHTML("beforeend", note);
-    });
+function showNotes() {
+  if (localNotes) {
+    const notes = localNotes
+      .map((item) => {
+        return `<div data-id="${item.id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
+      <div class="p-2 border rounded-lg">
+      <div class="delete__note">X</div>
+      <div class="title__note"><h2>${item.title}</h2></div>
+      <div class="subtitle__note break-words">${item.subtitle}</div>
+      </div>
+      </div>`;
+      })
+      .join("");
+    wrapperNote.insertAdjacentHTML("beforeend", notes);
   }
 }
-showNotes()
-
-
+showNotes();
