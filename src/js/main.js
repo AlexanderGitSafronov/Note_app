@@ -55,7 +55,7 @@ wrapperNote.addEventListener("click", (e) => {
 
 // Добавляєм нотатку
 function pushNote(id, title, subtitle) {
-  wrapperNote.innerHTML += noteHtml(id,title,subtitle);
+  wrapperNote.innerHTML += getNoteHTML(id,title,subtitle);
 }
 
 function handleNoteCreation(id, title, subtitle) {
@@ -81,9 +81,7 @@ function validateCreateButton() {
 function showNotes() {
   if (localNotes) {
     const notes = localNotes
-      .map((item) => {
-        return noteHtml(item.id,item.title,item.subtitle)
-      })
+      .map((item) => getNoteHTML(item.id,item.title,item.subtitle))
       .join("");
     wrapperNote.insertAdjacentHTML("beforeend", notes);
   }
@@ -91,7 +89,7 @@ function showNotes() {
 showNotes();
 
 // Нотатка HTML
-function noteHtml(id,title,subtitle) {
+function getNoteHTML(id,title,subtitle) {
   return `<div data-id="${id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
   <div class="p-2 border rounded-lg">
   <div class="delete__note">X</div>
