@@ -14,6 +14,57 @@ modalOpen.addEventListener("click", () => {
 wrapperModal.addEventListener("click", () => {
   hideModal();
 });
+
+getTitleValue.addEventListener("input", () => {
+  validateCreateButton();
+});
+getSubtitleValue.addEventListener("input", () => {
+  validateCreateButton();
+});
+
+let localNotes = JSON.parse(localStorage.getItem("notes")) || [];
+
+modal.addEventListener("click", (e) => {
+  e.stopPropagation();
+  // Скрити модалку по кнопці відміни
+  if (e.target.classList.contains("cancellation")) {
+    hideModal();
+  }
+  // Добавити нотатку на сторінку по кнопці створити
+  if (e.target.classList.contains("add__note")) {
+    handleNoteCreation(
+      localNotes.length + 1,
+      getTitleValue.value,
+      getSubtitleValue.value
+    );
+  }
+});
+
+// Видалення нотатки
+wrapperNote.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete__note")) {
+    e.target.closest(".note").remove();
+  }
+});
+
+// Добавляєм нотатку
+function pushNote(id, title, subtitle) {
+  wrapperNote.innerHTML += getNoteHTML(id,title,subtitle);
+}
+
+function handleNoteCreation(id, title, subtitle) {
+  localNotes.push({
+    id: localNotes.length + 1,
+    title: getTitleValue.value,
+    subtitle: getSubtitleValue.value,
+  });
+  localStorage.setItem("notes", JSON.stringify(localNotes));
+  hideModal();
+  pushNote(id, title, subtitle);
+  getTitleValue.value = "";
+  getSubtitleValue.value = "";
+  validateCreateButton();
+}
 // Скрити модалку
 function hideModal() {
   wrapperModal.classList.remove("wrapper__modal_show");
@@ -26,49 +77,24 @@ function validateCreateButton() {
     addNoteBtn.setAttribute("disabled", "disabled");
   }
 }
-
-// Видалення нотатки
-wrapperNote.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete__note")) {
-    e.target.closest(".note").remove();
+// Вивод нотаток на сторінку
+function showNotes() {
+  if (localNotes) {
+    const notes = localNotes
+      .map((item) => getNoteHTML(item.id,item.title,item.subtitle))
+      .join("");
+    wrapperNote.insertAdjacentHTML("beforeend", notes);
   }
-});
-
-getTitleValue.addEventListener("input", () => {
-  validateCreateButton();
-});
-getSubtitleValue.addEventListener("input", () => {
-  validateCreateButton();
-});
-
-function handleNoteCreation() {
-  hideModal();
-  addNote();
-  getTitleValue.value = "";
-  getSubtitleValue.value = "";
-  validateCreateButton();
 }
+showNotes();
 
-modal.addEventListener("click", (e) => {
-  e.stopPropagation();
-  // Скрити модалку по кнопці відміни
-  if (e.target.classList.contains("cancellation")) {
-    hideModal();
-  }
-  // Добавити нотатку на сторінку по кнопці створити
-  if (e.target.classList.contains("add__note")) {
-    handleNoteCreation();
-  }
-});
-
-// Нотатка
-function addNote() {
-  const note = `<div class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
+// Нотатка HTML
+function getNoteHTML(id,title,subtitle) {
+  return `<div data-id="${id}" class="note w-full sm:w-1/2 md:w-1/4 lg:w-1/6 p-2 relative">
   <div class="p-2 border rounded-lg">
-    <div class="delete__note">X</div>
-    <div class="title__note"><h2>${getTitleValue.value}</h2></div>
-    <div class="subtitle__note break-words">${getSubtitleValue.value}</div>
+  <div class="delete__note">X</div>
+  <div class="title__note"><h2>${title}</h2></div>
+  <div class="subtitle__note break-words">${subtitle}</div>
   </div>
-</div>`;
-  wrapperNote.insertAdjacentHTML("beforeend", note);
+  </div>`
 }
