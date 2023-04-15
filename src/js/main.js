@@ -32,12 +32,6 @@ modal.addEventListener("click", (e) => {
   }
   // Добавити нотатку на сторінку по кнопці створити
   if (e.target.classList.contains("add__note")) {
-    localNotes.push({
-      id: localNotes.length + 1,
-      title: getTitleValue.value,
-      subtitle: getSubtitleValue.value,
-    });
-    localStorage.setItem("notes", JSON.stringify(localNotes));
     handleNoteCreation(
       localNotes.length + 1,
       getTitleValue.value,
@@ -59,6 +53,12 @@ function pushNote(id, title, subtitle) {
 }
 
 function handleNoteCreation(id, title, subtitle) {
+  localNotes.push({
+    id: localNotes.length + 1,
+    title: getTitleValue.value,
+    subtitle: getSubtitleValue.value,
+  });
+  localStorage.setItem("notes", JSON.stringify(localNotes));
   hideModal();
   pushNote(id, title, subtitle);
   getTitleValue.value = "";
